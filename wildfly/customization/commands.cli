@@ -7,5 +7,25 @@ batch
 # Add the datasource
 data-source add --name=UnifiedPushDS --driver-name=mysql --jndi-name=java:jboss/datasources/ExampleMySQLDS --connection-url=jdbc:mysql://localhost:3306/sample?useUnicode=true&amp;characterEncoding=UTF-8 --user-name=user --password=password --use-ccm=false --max-pool-size=25 --blocking-timeout-wait-millis=5000 --enabled=true
 
+# Add a Gelf logger
+/subsystem=logging/custom-formatter=JSON_FORMATTER/:add(module=biz.paluch.logging,class=biz.paluch.logging.gelf.wildfly.WildFlyJsonFormatter,properties={ \
+       version="1.0", \
+       fields="Severity,ThreadName,LoggerName", \
+       extractStackTrace=true, \
+       filterStackTrace=true, \
+       includeLogMessageParameters=false, \
+       timestampPattern="yyyy-MM-dd HH:mm:ss,SSS", \
+       additionalFields="fieldName1=fieldValue1,fieldName2=fieldValue2", \
+       additionalFieldTypes="fieldName1=String,fieldName2=String,fieldName3=String", \
+       mdcFields="mdcField1,mdcField2", \
+       dynamicMdcFields="mdc.*,(mdc|MDC)fields", \
+       includeFullMdc=true \
+})
+/subsystem=logging/console-handler=JSON_HANDLER:add 
+/subsystem=logging/console-handler=JSON_HANDLER:write-attribute(name=named-formatter, value=JSON_FORMATTER)
+/subsystem=logging/root-logger=ROOT:add-handler(name="JSON_HANDLER")
+/subsystem=logging/console-handler=JSON_HANDLER:write-attribute(name=enabled, value=${env.LOGGING_LAYOUT_JSON_ENABLED:true})
+/subsystem=logging/console-handler=CONSOLE:write-attribute(name=enabled, value=${env.LOGGING_LAYOUT_TEXT_ENABLED:false})
+
 # Execute the batch
 run-batch
