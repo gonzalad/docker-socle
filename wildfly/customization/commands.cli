@@ -24,8 +24,8 @@ data-source add --name=UnifiedPushDS --driver-name=mysql --jndi-name=java:jboss/
 /subsystem=logging/console-handler=JSON_HANDLER:add 
 /subsystem=logging/console-handler=JSON_HANDLER:write-attribute(name=named-formatter, value=JSON_FORMATTER)
 /subsystem=logging/root-logger=ROOT:add-handler(name="JSON_HANDLER")
-/subsystem=logging/console-handler=JSON_HANDLER:write-attribute(name=enabled, value=${env.LOGGING_LAYOUT_JSON_ENABLED:true})
-/subsystem=logging/console-handler=CONSOLE:write-attribute(name=enabled, value=${env.LOGGING_LAYOUT_TEXT_ENABLED:false})
+/subsystem=logging/console-handler=JSON_HANDLER:write-attribute(name=level, value=${env.LOGGING_LAYOUT_JSON_LEVEL:OFF})
+/subsystem=logging/console-handler=CONSOLE:write-attribute(name=level, value=${env.LOGGING_LAYOUT_TEXT_LEVEL:ALL})
 
 # Execute the batch
 run-batch

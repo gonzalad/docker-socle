@@ -11,13 +11,13 @@ You'll need a solution to route stdout to logstash (i.e. logspout).
 To start the image:
 
 ```
-docker run -p 8080:8080 wildfly-config-cli 
+docker run -p 8080:8080 -ti wildfly-config-cli
 ```
 
 To start the image without JSON logging:
 
 ```
-docker run -p 8080:8080 -e LOGGING_LAYOUT=TEXT wildfly-config-cli
+docker run -p 8080:8080 -e LOGGING_LAYOUT=TEXT -ti wildfly-config-cli
 ```
 
 ## Customizing the configuration
@@ -40,7 +40,7 @@ The image contains some scripts you can call in child images:
 
 ## Build
 
-docker build --rm --tag wildfly-config-cli
+docker build --rm --tag wildfly-config-cli .
 
 ## References
 
